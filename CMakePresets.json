@@ -1,0 +1,42 @@
+{
+    "version": 4,
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "Default Config",
+            "description": "Default build using Ninja generator",
+            "generator": "Ninja Multi-Config",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "/gcc-16/bin/c++",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "debug",
+            "displayName": "Debug Build",
+            "description": "Debug build configuration",
+            "configurePreset": "default",
+            "configuration": "Debug",
+            "jobs": 0
+        },
+        {
+            "name": "relwithdebinfo",
+            "displayName": "Release Build (Debug Symbols)",
+            "description": "RelWithDebInfo build configuration",
+            "configurePreset": "default",
+            "configuration": "RelWithDebInfo",
+            "jobs": 0
+        },
+        {
+            "name": "release",
+            "displayName": "Release Build",
+            "description": "Release build configuration",
+            "configurePreset": "default",
+            "configuration": "Release",
+            "jobs": 0
+        }
+    ]
+} 
