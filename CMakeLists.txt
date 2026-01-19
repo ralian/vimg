@@ -22,6 +22,6 @@ target_link_libraries(vimg INTERFACE ctre)
 add_executable(example_rtmi examples/example_rtmi.cpp)
 target_link_libraries(example_rtmi PRIVATE vimg)
 
-add_executable(example_json2cpp examples/example_jsonrefl.cpp)
-target_link_libraries(example_json2cpp PRIVATE vimg)
+add_executable(example_jsonrefl examples/example_jsonrefl.cpp)
+target_link_libraries(example_jsonrefl PRIVATE vimg)
 
