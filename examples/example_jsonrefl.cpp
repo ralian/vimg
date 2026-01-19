@@ -1,7 +1,7 @@
-#include <vimg/jsonrefl.hpp>
+#include <iostream>
 #include <meta>
-#include <cstdio>
 #include <ranges>
+#include <vimg/jsonrefl.hpp>
 
 using namespace vi::jsonrefl;
 
@@ -45,29 +45,27 @@ constexpr std::string_view json_3 = R"(
 )";
 
 template<typename T>
-constexpr void inspect_json_type() {
+void inspect_json_type() {
     constexpr auto type_name = std::meta::identifier_of(^^T);
-    printf("=== %.*s Type Information ===\n", 
-           (int)type_name.size(),
-           type_name.data());
-    printf("Sizeof(%.*s): %zu bytes\n",
-           (int)type_name.size(),
-           type_name.data(), sizeof(^^T));
+    std::cout << "=== " << type_name << " Type Information ===\n";
+    std::cout << "Sizeof(" << type_name << "): " << sizeof(^^T) << " bytes\n";
+    std::cout<< std::endl;
 }
 
 int main() {
     inspect_json_type<JsonType1>();
     JsonType1 obj1;
-    printf("obj1.foo = %.*s\n", (int)obj1.foo.size(), obj1.foo.data());
-    printf("obj1.bar = %.*s\n", (int)obj1.bar.size(), obj1.bar.data());
-    printf("obj1.baz = %.*s\n", (int)obj1.baz.size(), obj1.baz.data());
+    std::cout << "obj1.foo = " << obj1.foo << '\n';
+    std::cout << "obj1.bar = " << obj1.bar << '\n';
+    std::cout << "obj1.baz = " << obj1.baz << '\n';
+    std::cout << std::endl;
 
     inspect_json_type<JsonType2>();
     JsonType2 obj2{.string_type = "string_value", .int_type = 123, .bool_type = true, .null_type = nullptr};
-    printf("obj2.string_type = %.*s\n", (int)obj2.string_type.size(), obj2.string_type.data());
-    printf("obj2.int_type = %d\n", obj2.int_type);
-    printf("obj2.bool_type = %d\n", obj2.bool_type);
-    printf("obj2.null_type = %d\n", obj2.null_type);
-    
+    std::cout << "obj2.string_type = " << obj2.string_type << '\n';
+    std::cout << "obj2.int_type = " << obj2.int_type << '\n';  
+    std::cout << "obj2.bool_type = " << obj2.bool_type << '\n';
+    std::cout << "obj2.null_type = " << obj2.null_type << '\n';
+    std::cout << std::endl;
     return 0;
 }
