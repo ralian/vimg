@@ -1,7 +1,7 @@
 #include <iostream>
 #include <meta>
 #include <ranges>
-#include <vimg/jsonrefl.hpp>
+#include <vimg/from_json.hpp>
 
 using namespace vi::jsonrefl;
 

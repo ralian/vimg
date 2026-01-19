@@ -5,10 +5,6 @@ project(vimg LANGUAGES CXX VERSION 0.1)
 add_compile_options(-std=c++26 -freflection)
 
 include(FetchContent)
-# FetchContent_Declare(glaze SYSTEM EXCLUDE_FROM_ALL
-#     GIT_REPOSITORY https://github.com/stephenberry/glaze.git
-#     GIT_TAG v7.0.1
-# )
 FetchContent_Declare(ctre SYSTEM EXCLUDE_FROM_ALL
     GIT_REPOSITORY https://github.com/hanickadot/compile-time-regular-expressions.git
     GIT_TAG v3.10.0
@@ -22,6 +18,6 @@ target_link_libraries(vimg INTERFACE ctre)
 add_executable(example_rtmi examples/example_rtmi.cpp)
 target_link_libraries(example_rtmi PRIVATE vimg)
 
-add_executable(example_jsonrefl examples/example_jsonrefl.cpp)
-target_link_libraries(example_jsonrefl PRIVATE vimg)
+add_executable(example_from_json examples/example_from_json.cpp)
+target_link_libraries(example_from_json PRIVATE vimg)
 

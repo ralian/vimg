@@ -16,8 +16,17 @@ If you need to install a new version of GCC, I have provided a dockerfile for th
 
 ## Using the GCC Dockerfile
 
+```
 docker build . -f gcc-trunk.docker --build-arg JOBS=4 -t gcc-builder:latest
 docker run --rm -v .:/vimg -it gcc-builder
+```
+
+## Building the examples
+
+```
+cmake --preset default
+cmake --build --preset debug
+```
 
 ## How do I use the project?
 
@@ -27,6 +36,6 @@ Of course, even though this library is header only, I'd like to remind you that 
 
 ## Project Synopsis
 
-- [Runtime Meta-Info](): RTMI was inspired by RTTI, a longstanding feature of C++. Even though Reflection is a compile-time feature, this library allows you to store the reflection info and retrieve it at runtime. It could be used for dynamic feature and binary structure discovery.
-- [Json Reflector](): Does what it says on the tin. This was inspired in part by a project by Jason Turner - his project builds a variant tree from a given input JSON, but this tool allows you to create a tuple representing a given object. Uses CTRE to aid in describing a compile-time JSON parser.
+- [Runtime Meta-Info](./src/vimg/rtmi.hpp): RTMI was inspired by RTTI, a longstanding feature of C++. Even though Reflection is a compile-time feature, this library allows you to store the reflection info and retrieve it at runtime. It could be used for dynamic feature and binary structure discovery.
+- [From JSON](./src/vimg/from_json.hpp): Does what it says on the tin. This was inspired in part by [json2cpp](https://github.com/lefticus/json2cpp) by Jason Turner - his project builds a variant tree from a given input JSON, but this tool allows you to create an aggregate representing a given object. Uses CTRE to aid in describing a compile-time JSON parser.
 
