@@ -21,6 +21,8 @@ target_link_libraries(example_rtmi PRIVATE vimg)
 add_executable(example_to_json examples/example_to_json.cpp)
 target_link_libraries(example_to_json PRIVATE vimg)
 
+add_executable(example_to_ddl examples/example_to_ddl.cpp)
+target_link_libraries(example_to_ddl PRIVATE vimg)
+
 add_executable(example_from_json examples/example_from_json.cpp)
 target_link_libraries(example_from_json PRIVATE vimg)
-
