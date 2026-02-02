@@ -26,3 +26,6 @@ target_link_libraries(example_to_ddl PRIVATE vimg)
 
 add_executable(example_from_json examples/example_from_json.cpp)
 target_link_libraries(example_from_json PRIVATE vimg)
+
+add_executable(example_to_dot examples/example_to_dot.cpp)
+target_link_libraries(example_to_dot PRIVATE vimg)
