@@ -56,14 +56,16 @@ consteval auto generate_type_ddl()
     result += std::meta::identifier_of(^^T);
     result += " (\n";
 
-    constexpr std::size_t NumMembers = count_members<T>();
-    [&]<std::size_t... Is>(std::index_sequence<Is...>) {
-        ( (result += "\t",
-           result += std::meta::identifier_of(get_member<T, Is>()),
-           result += "\t\t",
-           result += type_to_ddl_type<typename [:std::meta::type_of(get_member<T, Is>()):]>(),
-           result += ",\n"), ... );
-    }(std::make_index_sequence<NumMembers>{});
+    constexpr auto ctx = std::meta::access_context::current();
+    template for (auto& member : 
+        std::define_static_array(std::meta::nonstatic_data_members_of(^^T, ctx))
+    ) {
+        result += "\t";
+        result += std::meta::identifier_of(member);
+        result += "\t\t";
+        result += type_to_ddl_type<typename [:std::meta::type_of(member):]>();
+        result += ",\n";
+    }
 
     result += ");";
     return result;
@@ -75,15 +77,32 @@ consteval auto generate_insert_statement(const T& obj)
     char_arr<N> result;
     result += "INSERT INTO ";
     result += std::meta::identifier_of(^^T);
+
+    bool first = true;
+    constexpr auto ctx = std::meta::access_context::current();
+
+    // Safer... but worth it?
+
+    // result += " (";
+    // first = true;
+    // template for (auto& member : 
+    //     std::define_static_array(std::meta::nonstatic_data_members_of(^^T, ctx))
+    // ) {
+    //     if (!first) result += ", ";
+    //     first = false;
+    //     result += std::meta::identifier_of(member);
+    // }
+    // result += ")";
+
     result += " VALUES (";
-
-    constexpr std::size_t NumMembers = count_members<T>();
-    [&]<std::size_t... Is>(std::index_sequence<Is...>) {
-        ((append_sql_value(result, obj.[:get_member<T, Is>():]),
-          (Is + 1 < NumMembers ? (void)(result += ", ") : (void)0)), ...);
-    }(std::make_index_sequence<NumMembers>{});
-
-    result += ");";
+    first = true;
+    template for (auto& member : 
+        std::define_static_array(std::meta::nonstatic_data_members_of(^^T, ctx))
+    ) {
+        if (!first) result += ", ";
+        first = false;
+        append_sql_value(result, obj.[:member:]);
+    }
     return result;
 }
 
