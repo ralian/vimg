@@ -29,3 +29,6 @@ target_link_libraries(example_from_json PRIVATE vimg)
 
 add_executable(example_to_dot examples/example_to_dot.cpp)
 target_link_libraries(example_to_dot PRIVATE vimg)
+
+add_executable(example_validator examples/example_validator.cpp)
+target_link_libraries(example_validator PRIVATE vimg)

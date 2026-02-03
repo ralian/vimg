@@ -35,6 +35,7 @@ First of all, there is no way to import the entire project at once. Each header/
 ## Project Synopsis
 
 - [Runtime Meta-Info](./src/vimg/rtmi.hpp): RTMI was inspired by RTTI, a longstanding feature of C++. Even though Reflection is a compile-time feature, this library allows you to store the reflection info and retrieve it at runtime. It could be used for dynamic feature and binary structure discovery.
+- [Identifier Validator](./src/vimg/validator.hpp): Match identifiers of class types with a regex pattern.
 - [To DDL](./src/vimg/to_ddl.hpp): Generate a DDL `CREATE TABLE` expression from a C++ type's members.
 - [To DOT (Graphviz)](./src/vimg/to_dot.hpp): Generate a Graphviz Digraph of a given pack of types, showing each type as a node with all members and edges directed to bases of the type.
 - [To JSON](./src/vimg/to_json.hpp): JSON Generation utilites:
