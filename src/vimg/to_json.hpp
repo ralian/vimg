@@ -1,3 +1,5 @@
+#pragma once
+
 #include <meta>
 #include <array>
 #include <string_view>
@@ -97,4 +99,4 @@ consteval auto generate_object_json(const T& obj)
     return result;
 }
 
-}
+} // namespace vi::to_json

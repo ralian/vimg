@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cmath>
+#include <meta>
 #include <string_view>
 #include <system_error>
 
@@ -105,4 +106,4 @@ struct char_arr {
     }
 };
 
-}
+} // namespace vi

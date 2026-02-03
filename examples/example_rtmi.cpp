@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <vimg/rtmi.hpp>
 
-using namespace vimg::rtmi;
+using namespace vi::rtmi;
 
 constinit std::tuple<std::string_view, int> int_type {"int", 0};
 

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <concepts>
 #include <meta>
 #include <ctre.hpp>
@@ -9,7 +11,7 @@
 #include <initializer_list>
 #include <tuple>
 
-namespace vi::jsonrefl {
+namespace vi::from_json {
 
 namespace re {
 using namespace ctre::literals;
@@ -124,4 +126,4 @@ consteval auto define_aggregate_from_json(
     return std::meta::define_aggregate(type_class, spec_span);
 }
 
-}
+} // namespace vi::from_json

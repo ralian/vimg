@@ -3,7 +3,7 @@
 #include <ranges>
 #include <vimg/from_json.hpp>
 
-using namespace vi::jsonrefl;
+using namespace vi::from_json;
 
 constexpr std::string_view json_1 = R"(
 {

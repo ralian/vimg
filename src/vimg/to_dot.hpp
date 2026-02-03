@@ -1,3 +1,5 @@
+#pragma once
+
 #include <meta>
 #include <array>
 #include <string_view>

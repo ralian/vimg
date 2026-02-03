@@ -1,9 +1,11 @@
+#pragma once
+
 #include <array>
 #include <meta>
 #include <string_view>
 #include <variant>
 
-namespace vimg::rtmi {
+namespace vi::rtmi {
 
 constexpr std::size_t MAX_BASES = 16;
 
@@ -85,4 +87,4 @@ struct weak_meta_ptr {
     {}
 };
 
-}
+} // namespace vi::rtmi

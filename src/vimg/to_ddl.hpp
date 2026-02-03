@@ -1,3 +1,5 @@
+#pragma once
+
 #include <meta>
 #include <array>
 #include <charconv>
@@ -106,4 +108,4 @@ consteval auto generate_insert_statement(const T& obj)
     return result;
 }
 
-}
+} // namespace vi::to_ddl
