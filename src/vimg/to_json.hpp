@@ -1,7 +1,7 @@
 #include <meta>
 #include <array>
 #include <string_view>
-#include <vimg/char_arr.hpp>
+#include <vimg/util.hpp>
 
 namespace vi::to_json {
 
