@@ -32,3 +32,6 @@ target_link_libraries(example_to_dot PRIVATE vimg)
 
 add_executable(example_validator examples/example_validator.cpp)
 target_link_libraries(example_validator PRIVATE vimg)
+
+add_executable(example_from_pyclass examples/example_from_pyclass.cpp)
+target_link_libraries(example_from_pyclass PRIVATE vimg)
