@@ -45,7 +45,6 @@ constexpr std::optional<std::string_view>
         return std::nullopt;
 }
 
-// Extract all keys and values from a JSON object at compile time
 template<std::size_t MaxKeys = 64>
 consteval auto extract_keys_and_values(const std::string_view json_obj) {
     std::array<std::string_view, MaxKeys> keys{};
@@ -65,7 +64,6 @@ consteval auto extract_keys_and_values(const std::string_view json_obj) {
     return std::make_tuple(keys, values, count);
 }
 
-// Determine the type from a JSON value string
 consteval auto determine_value_type(std::string_view value) {
     if (re::numeric.match(value)) {
         return ^^int;
@@ -80,7 +78,21 @@ consteval auto determine_value_type(std::string_view value) {
     return ^^void;
 }
 
-// Make member spec from key and value
+template<typename T>
+constexpr void parse_value(T& out, std::string_view value) {
+    if constexpr (std::is_same_v<T, bool>) {
+        out = (value == "true");
+    } else if constexpr (std::is_integral_v<T>) {
+       std::from_chars(value.data(), value.data() + value.size(), out);
+    } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
+        out = nullptr;
+    } else if constexpr (std::is_same_v<T, std::string_view>) {
+        out = value;
+    } else {
+        static_assert(false, "Invalid type");
+    }
+}
+
 consteval auto make_member_spec_from_key_value(std::string_view key, std::string_view value) {
     std::meta::data_member_options opts{};
     opts.name = key;
@@ -88,7 +100,6 @@ consteval auto make_member_spec_from_key_value(std::string_view key, std::string
     return std::meta::data_member_spec(value_type, opts);
 }
 
-// Build member specs from arrays of keys and values
 template<std::size_t N>
 consteval auto build_member_specs(
     const std::array<std::string_view, N>& keys,
@@ -107,8 +118,8 @@ consteval auto build_member_specs(
 //   consteval { define_aggregate_from_json(^^MyType, json_string); }
 consteval auto define_aggregate_from_json(
     std::meta::info type_class,
-    const std::string_view json_str)
-{
+    const std::string_view json_str
+) {
     auto obj_content_opt = extract_object(json_str);
     if (!obj_content_opt.has_value()) {
         return type_class;
@@ -125,5 +136,45 @@ consteval auto define_aggregate_from_json(
     
     return std::meta::define_aggregate(type_class, spec_span);
 }
+
+// Parse JSON (single object for now) into a given type
+template <typename T>
+constexpr T parse_json(
+    const std::string_view json_str
+) {
+    T out;
+
+    auto obj_content_opt = extract_object(json_str);
+    if (!obj_content_opt.has_value()) {
+        throw std::runtime_error("Invalid JSON object");
+    }
+    
+    auto obj_content = *obj_content_opt;
+    constexpr auto max_keys = std::size_t{64};
+    auto [keys, values, key_count] = extract_keys_and_values<max_keys>(obj_content);
+    
+    constexpr auto ctx = std::meta::access_context::current();
+    template for (const auto& member : 
+        std::define_static_array(std::meta::nonstatic_data_members_of(^^T, ctx))
+    ) {
+        for (std::size_t i = 0; i < key_count; ++i) {
+            if (std::meta::identifier_of(member) == keys[i]) {
+                parse_value(out.[:member:], values[i]);
+                break;
+            }
+        }
+    }
+
+    return std::move(out);
+}
+
+template <typename T, T Val>
+struct defaults
+{
+    constexpr T& operator()()
+    {
+        return Val;
+    }
+};
 
 } // namespace vi::from_json

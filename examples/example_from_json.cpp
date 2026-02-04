@@ -54,7 +54,7 @@ void inspect_json_type() {
 
 int main() {
     inspect_json_type<JsonType1>();
-    JsonType1 obj1;
+    constexpr JsonType1 obj1 = parse_json<JsonType1>(json_1);
     std::cout << "obj1.foo = " << obj1.foo << '\n';
     std::cout << "obj1.bar = " << obj1.bar << '\n';
     std::cout << "obj1.baz = " << obj1.baz << '\n';
@@ -67,5 +67,6 @@ int main() {
     std::cout << "obj2.bool_type = " << obj2.bool_type << '\n';
     std::cout << "obj2.null_type = " << obj2.null_type << '\n';
     std::cout << std::endl;
+
     return 0;
 }
