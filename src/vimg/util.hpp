@@ -8,18 +8,6 @@
 
 namespace vi {
 
-template<typename T>
-consteval std::size_t count_members() {
-    return std::meta::nonstatic_data_members_of(
-        ^^T, std::meta::access_context::current()).size();
-}
-
-template<typename T, std::size_t I>
-consteval auto get_member() {
-    return std::meta::nonstatic_data_members_of(
-        ^^T, std::meta::access_context::current())[I];
-}
-
 constexpr std::size_t strlen(const char* str) noexcept
 {
     std::size_t result = 0;
@@ -83,7 +71,12 @@ struct char_arr {
 
     constexpr char_arr() : data{} {}
 
-    constexpr char_arr(const char* str) : data{str, str + strlen(str)} {}
+    constexpr char_arr(const char* str) : data{}
+    {
+        std::size_t len = strlen(str);
+        std::copy(str, str + len, data.begin());
+        data[len] = '\0';
+    }
 
     constexpr char_arr<N>&operator+=(char c)
     {
@@ -105,5 +98,12 @@ struct char_arr {
         return std::string_view(data.data(), strlen(data.data()));
     }
 };
+
+template<typename T, T Arr>
+consteval auto rightsize()
+{
+    constexpr std::size_t used = strlen(Arr.data.data());
+    return char_arr<used + 1>(Arr.data.data());
+}
 
 } // namespace vi
