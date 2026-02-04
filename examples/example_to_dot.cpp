@@ -1,7 +1,6 @@
 #include <vimg/to_dot.hpp>
 
 #include <iostream>
-#include <string>
 
 using namespace vi::to_dot;
 
@@ -9,12 +8,12 @@ struct Base {
     int id;
 };
 
-struct Derived : Base {
+struct Derived : public Base {
     std::string name;
     bool active;
 };
 
-struct MoreDerived : Derived {
+struct MoreDerived : public Derived {
     double value;
 };
 

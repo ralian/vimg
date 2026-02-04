@@ -23,7 +23,13 @@ consteval auto build_node_label() -> char_arr<LabelSize> {
     char_arr<LabelSize> result;
     result += std::meta::display_string_of(^^T);
     constexpr auto ctx = std::meta::access_context::current();
-    for (const auto& member : std::meta::nonstatic_data_members_of(^^T, ctx)) {
+    for (const auto& member : std::meta::members_of(^^T, ctx)) {
+        if (!std::meta::has_identifier(member))
+        {
+            result += "|";
+            result += std::meta::display_string_of(member);
+            continue;
+        }
         result += "|";
         result += std::meta::identifier_of(member);
         result += " : ";
