@@ -18,19 +18,25 @@ constexpr void escape_dot(char_arr<N>& out, std::string_view str) {
     out += '"';
 }
 
-template<typename T, std::size_t LabelSize = 512>
+template<typename T, std::size_t LabelSize = 768>
 consteval auto build_node_label() -> char_arr<LabelSize> {
     char_arr<LabelSize> result;
     result += std::meta::display_string_of(^^T);
-    constexpr auto ctx = std::meta::access_context::current();
+    constexpr auto ctx = std::meta::access_context::unchecked();
     for (const auto& member : std::meta::members_of(^^T, ctx)) {
         if (!std::meta::has_identifier(member))
         {
-            result += "|";
-            result += std::meta::display_string_of(member);
+            // result += "|";
+            // result += std::meta::display_string_of(member);
             continue;
         }
         result += "|";
+        if (std::meta::is_public(member))
+            result += "public ";
+        else if (std::meta::is_protected(member))
+            result += "protected ";
+        else if (std::meta::is_private(member))
+            result += "private ";
         result += std::meta::identifier_of(member);
         result += " : ";
         result += std::meta::display_string_of(std::meta::type_of(member));
@@ -49,21 +55,25 @@ consteval auto build_node() -> char_arr<NodeSize> {
     return result;
 }
 
-template<typename T, std::size_t EdgeSize = 256>
+template<typename T, std::size_t EdgeSize = 512>
 consteval auto build_edges() -> char_arr<EdgeSize> {
     char_arr<EdgeSize> result;
-    constexpr auto ctx = std::meta::access_context::current();
+    constexpr auto ctx = std::meta::access_context::unchecked();
     for (const auto& base : std::meta::bases_of(^^T, ctx)) {
         result += "  ";
         escape_dot(result, std::meta::identifier_of(^^T));
         result += " -> ";
         escape_dot(result, std::meta::identifier_of(base));
+        if (std::meta::is_protected(base))
+            result += " [style=dashed]";
+        else if (std::meta::is_private(base))
+            result += " [style=dotted]";
         result += ";\n";
     }
     return result;
 }
 
-template<typename T, std::size_t BlockSize = 1024>
+template<typename T, std::size_t BlockSize = 2048>
 consteval auto dot_for_type()
 -> char_arr<BlockSize>
 {
@@ -74,8 +84,8 @@ consteval auto dot_for_type()
 }
 
 template<typename... Ts>
-consteval auto generate_dot_for_types() -> char_arr<8192> {
-    char_arr<8192> result;
+consteval auto generate_dot_for_types() -> char_arr<32768> {
+    char_arr<32768> result;
     result += "digraph G {\nrankdir=LR;\n";
     (result += std::string_view(dot_for_type<Ts>()), ...);
     result += "}\n";
